@@ -1,0 +1,33 @@
+import org.testng.annotations.Test;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import net.serenitybdd.rest.SerenityRest;
+
+public class Test11 {
+
+    static Response response;
+
+    @Test
+    public void addUsers() {
+        RestAssured.baseURI = "http://reqres.in";
+        response = SerenityRest.given().urlEncodingEnabled(false).relaxedHTTPSValidation().contentType(ContentType.JSON)
+                .log().all()
+                .when().body("{\r\n" + 
+                        "    \"name\": \"Mallik\",\r\n" + 
+                        "    \"job\": \"TestLead\"\r\n" + 
+                        "}")
+                .post("/api/users")
+                .then().log().all().extract().response();
+    }
+
+    @Test
+    public void getUsers() {
+        RestAssured.baseURI = "http://reqres.in";
+        response = SerenityRest.given().urlEncodingEnabled(false).relaxedHTTPSValidation().contentType(ContentType.JSON)
+                .log().all()
+                .when()
+                .get("/api/users?id=3")
+                .then().log().all().extract().response();
+    }
+}
